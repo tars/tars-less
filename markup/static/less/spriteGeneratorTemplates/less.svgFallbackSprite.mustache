@@ -1,0 +1,43 @@
+{
+  // Default options
+  'functions': true
+}
+
+{{#items}}
+  @{{name}}-x: {{px.x}};
+  @{{name}}-y: {{px.y}};
+  @{{name}}-offset-x: {{px.offset_x}};
+  @{{name}}-offset-y: {{px.offset_y}};
+  @{{name}}-width: {{px.width}};
+  @{{name}}-height: {{px.height}};
+  @{{name}}-total-width: {{px.total_width}};
+  @{{name}}-total-height: {{px.total_height}};
+  @{{name}}-image: '{{{escaped_image}}}';
+  @{{name}}: {{px.x}} {{px.y}} {{px.offset_x}} {{px.offset_y}} {{px.width}} {{px.height}} {{px.total_width}} {{px.total_height}} '{{{escaped_image}}}' '{{{name}}}';
+{{/items}}
+
+{{#options.functions}}
+  .svg-sprite-width(@svg-sprite) {
+    width: ~`"@{svg-sprite}".split(', ')[4]`;
+  }
+
+  .svg-sprite-height(@svg-sprite) {
+    height: ~`"@{svg-sprite}".split(', ')[5]`;
+  }
+
+  .svg-sprite-position(@svg-sprite) {
+    @svg-sprite-offset-x: ~`"@{svg-sprite}".split(', ')[2]`;
+    @svg-sprite-offset-y: ~`"@{svg-sprite}".split(', ')[3]`;
+    background-position: @svg-sprite-offset-x  @svg-sprite-offset-y;
+  }
+
+  .svg-image-name(@svg-sprite) {
+    @svg-sprite-name-url: ~`'../img/svg/' + "@{svg-sprite}".split(', ')[9].replace(']', '').replace(/\'/g, '') + '.svg'`;
+    background-image: url(@svg-sprite-name-url);
+  }
+
+  .svg-fallback-sprite-image(@svg-sprite) {
+    @svg-sprite-image-url: ~`'../img/rasterSvgSprite/' + "@{svg-sprite}".split(', ')[8].replace(']', '').replace(/\'/g, '')`;
+    background-image: url(@svg-sprite-image-url);
+  }
+{{/options.functions}}
