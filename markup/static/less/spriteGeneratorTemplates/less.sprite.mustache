@@ -53,12 +53,6 @@
   }
 
   .highDpiMedia(@sprite) {
-    {{#options.dpi144}}
-      @media screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and ( min-resolution: 144dpi), only screen and ( min-resolution: 1.5dppx) {
-          @sprite-image: ~`'../img/pngSprite/144dpi/' + "@{sprite}".split(', ')[8].replace(']', '').replace(/\'/g, '')`;
-          background-image: url(@sprite-image);
-      }
-    {{/options.dpi144}}
 
     {{#options.dpi192}}
       @media screen and (-webkit-min-device-pixel-ratio: 2), only screen and ( min-resolution: 192dpi), only screen and ( min-resolution: 2dppx) {
@@ -73,5 +67,12 @@
           background-image: url(@sprite-image);
       }
     {{/options.dpi288}}
+
+    {{#options.dpi384}}
+      @media screen and (-webkit-min-device-pixel-ratio: 4), only screen and ( min-resolution: 384dpi), only screen and ( min-resolution: 4dppx) {
+          @sprite-image: ~`'../img/pngSprite/384dpi/' + "@{sprite}".split(', ')[8].replace(']', '').replace(/\'/g, '')`;
+          background-image: url(@sprite-image);
+      }
+    {{/options.dpi384}}
     }
 {{/options.functions}}
