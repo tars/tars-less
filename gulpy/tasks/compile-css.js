@@ -56,8 +56,8 @@ module.exports = function(buildOptions) {
         }
     );
 
-    return gulp.task('compile-css', function(cb) {
-        gulp.src(lessFilesToConcatinate)
+    return gulp.task('compile-css', function() {
+        return gulp.src(lessFilesToConcatinate)
             .pipe(concat('main' + buildOptions.hash + '.css'))
             .pipe(replace({
                 patterns: patterns,
@@ -95,7 +95,5 @@ module.exports = function(buildOptions) {
                     })
                 )
             );
-
-            cb(null);
         });
 };
