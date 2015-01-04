@@ -3,7 +3,7 @@ var concat = require('gulp-concat');
 var less = require('gulp-less');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
-var autoprefix = require('gulp-autoprefixer');
+var autoprefixer = require('gulp-autoprefixer');
 var replace = require('gulp-replace-task');
 var notify = require('gulp-notify');
 var tarsConfig = require('../../../tars-config');
@@ -18,10 +18,10 @@ var lessFilesToConcatinate = [
         './markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/sprite.less'
     ];
 
-var autoprefixerConfig = '';
+var useAutoprefixer = false;
 
 if (tarsConfig.autoprefixerConfig) {
-    autoprefixerConfig = tarsConfig.autoprefixerConfig.join(',');
+    useAutoprefixer = true;
 }
 
 if (tarsConfig.useSVG) {
@@ -68,8 +68,13 @@ module.exports = function(buildOptions) {
                 return '\nAn error occurred while compiling css.\nLook in the console for details.\n' + error;
             }))
             .pipe(
-                gulpif(autoprefixerConfig,
-                    autoprefix(autoprefixerConfig, { cascade: true })
+                gulpif(useAutoprefixer,
+                    autoprefixer(
+                        {
+                            browsers: tarsConfig.autoprefixerConfig,
+                            cascade: true
+                        }
+                    )
                 )
             )
             .on('error', notify.onError(function (error) {
