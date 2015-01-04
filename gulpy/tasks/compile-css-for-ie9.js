@@ -7,34 +7,34 @@ var plumber = require('gulp-plumber');
 var autoprefix = require('gulp-autoprefixer');
 var replace = require('gulp-replace-task');
 var notify = require('gulp-notify');
-var projectConfig = require('../../../tars-config');
-var notifyConfig = projectConfig.notifyConfig;
+var tarsConfig = require('../../../tars-config');
+var notifyConfig = tarsConfig.notifyConfig;
 var modifyDate = require('../../helpers/modifyDateFormatter');
 var browserSync = require('browser-sync');
 
 var lessFilesToConcatinate = [
-        './markup/' + projectConfig.fs.staticFolderName + '/less/normalize.less',
-        './markup/' + projectConfig.fs.staticFolderName + '/less/mixins.less',
-        './markup/' + projectConfig.fs.staticFolderName + '/less/spritesLess/sprite96.less',
-        './markup/' + projectConfig.fs.staticFolderName + '/less/spritesLess/sprite.less'
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/normalize.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/mixins.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/sprite96.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/sprite.less'
     ];
 
-    if (projectConfig.useSVG) {
+    if (tarsConfig.useSVG) {
         lessFilesToConcatinate.push(
-            './markup/' + projectConfig.fs.staticFolderName + '/less/spritesLess/svg-fallback-sprite.less',
-            './markup/' + projectConfig.fs.staticFolderName + '/less/spritesLess/svg-sprite.less'
+            './markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/svg-fallback-sprite.less',
+            './markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/svg-sprite.less'
         );
     }
 
     lessFilesToConcatinate.push(
-        './markup/' + projectConfig.fs.staticFolderName + '/less/fonts.less',
-        './markup/' + projectConfig.fs.staticFolderName + '/less/vars.less',
-        './markup/' + projectConfig.fs.staticFolderName + '/less/GUI.less',
-        './markup/' + projectConfig.fs.staticFolderName + '/less/common.less',
-        './markup/' + projectConfig.fs.staticFolderName + '/less/plugins/**/*.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/fonts.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/vars.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/GUI.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/common.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/plugins/**/*.less',
         './markup/modules/*/*.less',
         './markup/modules/*/ie/ie9.less',
-        './markup/' + projectConfig.fs.staticFolderName + '/less/etc/**/*.less'
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/etc/**/*.less'
     );
 
 /**
@@ -48,7 +48,7 @@ module.exports = function(buildOptions) {
     patterns.push(
         {
             match: '%=staticPrefix=%',
-            replacement: projectConfig.staticPrefix
+            replacement: tarsConfig.staticPrefix
         }
     );
 
@@ -69,7 +69,7 @@ module.exports = function(buildOptions) {
                 .on('error', notify.onError(function (error) {
                     return '\nAn error occurred while autoprefixing css.\nLook in the console for details.\n' + error;
                 }))
-                .pipe(gulp.dest('./dev/' + projectConfig.fs.staticFolderName + '/css/'))
+                .pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({stream:true}))
                 .pipe(
                     gulpif(notifyConfig.useNotify,

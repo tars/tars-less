@@ -3,12 +3,12 @@ var spritesmith = require('gulp.spritesmith');
 var gulpif = require('gulp-if');
 var notify = require('gulp-notify');
 var gutil = require('gulp-util');
-var projectConfig = require('../../../tars-config');
-var notifyConfig = projectConfig.notifyConfig;
+var tarsConfig = require('../../../tars-config');
+var notifyConfig = tarsConfig.notifyConfig;
 var modifyDate = require('../../helpers/modifyDateFormatter');
 var browserSync = require('browser-sync');
 
-var dpi = projectConfig.useImagesForDisplayWithDpi;
+var dpi = tarsConfig.useImagesForDisplayWithDpi;
 
 /**
  * Make sprite and less for this sprite
@@ -35,7 +35,7 @@ module.exports = function(buildOptions) {
         }
 
         for (var i = 0; i < dpiLength; i++) {
-            spriteData.push(gulp.src('./markup/' + projectConfig.fs.staticFolderName + '/' + projectConfig.fs.imagesFolderName + '/sprite/' + dpi[i] + 'dpi/*.png')
+            spriteData.push(gulp.src('./markup/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/sprite/' + dpi[i] + 'dpi/*.png')
                 .pipe(
                     spritesmith(
                         {
@@ -51,7 +51,7 @@ module.exports = function(buildOptions) {
                                 dpi288: dpi288,
                                 dpi384: dpi384
                             },
-                            cssTemplate: './markup/' + projectConfig.fs.staticFolderName + '/less/spriteGeneratorTemplates/less.sprite.mustache'
+                            cssTemplate: './markup/' + tarsConfig.fs.staticFolderName + '/less/spriteGeneratorTemplates/less.sprite.mustache'
                         }
                     )
                 )
@@ -60,7 +60,7 @@ module.exports = function(buildOptions) {
                 }))
             );
 
-            spriteData[i].img.pipe(gulp.dest('./dev/' + projectConfig.fs.staticFolderName + '/' + projectConfig.fs.imagesFolderName + '/pngSprite/' + dpi[i] + 'dpi/'))
+            spriteData[i].img.pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/pngSprite/' + dpi[i] + 'dpi/'))
                 .pipe(
                     gulpif(notifyConfig.useNotify,
                         notify({
@@ -76,7 +76,7 @@ module.exports = function(buildOptions) {
                 );
         }
 
-        return spriteData[0].css.pipe(gulp.dest('./markup/' + projectConfig.fs.staticFolderName + '/less/spritesLess/'))
+        return spriteData[0].css.pipe(gulp.dest('./markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/'))
                 .pipe(browserSync.reload({stream:true}))
                 .pipe(
                     gulpif(notifyConfig.useNotify,

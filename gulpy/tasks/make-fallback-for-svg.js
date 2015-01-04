@@ -3,8 +3,8 @@ var spritesmith = require('gulp.spritesmith');
 var gulpif = require('gulp-if');
 var notify = require('gulp-notify');
 var gutil = require('gulp-util');
-var projectConfig = require('../../../tars-config');
-var notifyConfig = projectConfig.notifyConfig;
+var tarsConfig = require('../../../tars-config');
+var notifyConfig = tarsConfig.notifyConfig;
 var modifyDate = require('../../helpers/modifyDateFormatter');
 var browserSync = require('browser-sync');
 
@@ -18,9 +18,9 @@ module.exports = function(buildOptions) {
 
         var spriteData = '';
 
-        if (projectConfig.useSVG && gutil.env.ie8) {
+        if (tarsConfig.useSVG && gutil.env.ie8) {
 
-            spriteData = gulp.src('./dev/' + projectConfig.fs.staticFolderName + '/' + projectConfig.fs.imagesFolderName + '/rasterSvgImages/*.png')
+            spriteData = gulp.src('./dev/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/rasterSvgImages/*.png')
                 .pipe(
                     spritesmith(
                         {
@@ -30,7 +30,7 @@ module.exports = function(buildOptions) {
                             engineOpts: {
                                 imagemagick: true
                             },
-                            cssTemplate: './markup/' + projectConfig.fs.staticFolderName + '/less/spriteGeneratorTemplates/less.svgFallbackSprite.mustache'
+                            cssTemplate: './markup/' + tarsConfig.fs.staticFolderName + '/less/spriteGeneratorTemplates/less.svgFallbackSprite.mustache'
                         }
                     )
                 )
@@ -38,7 +38,7 @@ module.exports = function(buildOptions) {
                     return '\nAn error occurred while making fallback for svg.\nLook in the console for details.\n' + error;
                 }));
 
-            spriteData.img.pipe(gulp.dest('./dev/' + projectConfig.fs.staticFolderName + '/' + projectConfig.fs.imagesFolderName + '/rasterSvgSprite/'))
+            spriteData.img.pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/rasterSvgSprite/'))
                 .pipe(
                     gulpif(notifyConfig.useNotify,
                         notify({
@@ -53,7 +53,7 @@ module.exports = function(buildOptions) {
                     )
                 );
 
-            return spriteData.css.pipe(gulp.dest('./markup/' + projectConfig.fs.staticFolderName + '/less/spritesLess/'))
+            return spriteData.css.pipe(gulp.dest('./markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/'))
                     .pipe(browserSync.reload({stream:true}))
                     .pipe(
                         gulpif(notifyConfig.useNotify,
@@ -69,9 +69,9 @@ module.exports = function(buildOptions) {
                         )
                     );
 
-        } else if (projectConfig.useSVG) {
+        } else if (tarsConfig.useSVG) {
 
-            spriteData = gulp.src('./dev/' + projectConfig.fs.staticFolderName + '/' + projectConfig.fs.imagesFolderName + '/svg/*.svg')
+            spriteData = gulp.src('./dev/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/svg/*.svg')
                 .pipe(
                     spritesmith(
                         {
@@ -81,7 +81,7 @@ module.exports = function(buildOptions) {
                             engineOpts: {
                                 imagemagick: true
                             },
-                            cssTemplate: './markup/' + projectConfig.fs.staticFolderName + '/less/spriteGeneratorTemplates/less.svgFallbackSprite.mustache'
+                            cssTemplate: './markup/' + tarsConfig.fs.staticFolderName + '/less/spriteGeneratorTemplates/less.svgFallbackSprite.mustache'
                         }
                     )
                 )
@@ -89,7 +89,7 @@ module.exports = function(buildOptions) {
                     return '\nAn error occurred while making fallback for svg.\nLook in the console for details.\n' + error;
                 }));
 
-            return spriteData.css.pipe(gulp.dest('./markup/' + projectConfig.fs.staticFolderName + '/less/spritesLess/'))
+            return spriteData.css.pipe(gulp.dest('./markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/'))
                     .pipe(browserSync.reload({stream:true}))
                     .pipe(
                         gulpif(notifyConfig.useNotify,
