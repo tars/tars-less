@@ -14,6 +14,7 @@ var browserSync = require('browser-sync');
 
 var lessFilesToConcatinate = [
         './markup/' + tarsConfig.fs.staticFolderName + '/less/normalize.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/libraries/**/*.less',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/mixins.less',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/sprite96.less',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/sprite.less'
