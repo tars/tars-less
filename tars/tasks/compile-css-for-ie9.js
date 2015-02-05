@@ -9,7 +9,7 @@ var replace = require('gulp-replace-task');
 var notify = require('gulp-notify');
 var tarsConfig = require('../../../tars-config');
 var notifyConfig = tarsConfig.notifyConfig;
-var modifyDate = require('../../helpers/modifyDateFormatter');
+var modifyDate = require('../../helpers/modify-date-formatter');
 var browserSync = require('browser-sync');
 
 var lessFilesToConcatinate = [
