@@ -1,15 +1,13 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var less = require('gulp-less');
-var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 var autoprefix = require('gulp-autoprefixer');
 var replace = require('gulp-replace-task');
 var notify = require('gulp-notify');
 var tarsConfig = require('../../../tars-config');
-var notifyConfig = tarsConfig.notifyConfig;
-var modifyDate = require('../../helpers/modify-date-formatter');
+var notifier = require('../../helpers/notifier');
 var browserSync = require('browser-sync');
 
 var lessFilesToConcatinate = [
@@ -75,17 +73,7 @@ module.exports = function(buildOptions) {
                 .pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({stream:true}))
                 .pipe(
-                    gulpif(notifyConfig.useNotify,
-                        notify({
-                            onLast: true,
-                            sound: notifyConfig.sounds.onSuccess,
-                            title: notifyConfig.title,
-                            message: 'Less-files for ie9 have been compiled. \n'+ notifyConfig.taskFinishedText +'<%= options.date %>',
-                            templateOptions: {
-                                date: modifyDate.getTimeOfModify()
-                            }
-                        })
-                    )
+                    notifier('Less-files for ie9 have been compiled')
                 );
         } else {
             gutil.log('!Stylies for ie9 are not used!');

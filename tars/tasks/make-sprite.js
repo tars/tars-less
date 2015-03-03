@@ -1,11 +1,9 @@
 var gulp = require('gulp');
 var spritesmith = require('gulp.spritesmith');
-var gulpif = require('gulp-if');
 var notify = require('gulp-notify');
 var gutil = require('gulp-util');
 var tarsConfig = require('../../../tars-config');
-var notifyConfig = tarsConfig.notifyConfig;
-var modifyDate = require('../../helpers/modify-date-formatter');
+var notifier = require('../../helpers/notifier');
 var browserSync = require('browser-sync');
 
 var dpi = tarsConfig.useImagesForDisplayWithDpi;
@@ -62,34 +60,14 @@ module.exports = function(buildOptions) {
 
             spriteData[i].img.pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/pngSprite/' + dpi[i] + 'dpi/'))
                 .pipe(
-                    gulpif(notifyConfig.useNotify,
-                        notify({
-                            onLast: true,
-                            sound: notifyConfig.sounds.onSuccess,
-                            title: notifyConfig.title,
-                            message: 'Sprite img with dpi = ' + dpi[i] + ' is ready. \n'+ notifyConfig.taskFinishedText +'<%= options.date %>',
-                            templateOptions: {
-                                date: modifyDate.getTimeOfModify()
-                            }
-                        })
-                    )
+                    notifier('Sprite img with dpi = ' + dpi[i] + ' is ready')
                 );
         }
 
         return spriteData[0].css.pipe(gulp.dest('./markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/'))
                 .pipe(browserSync.reload({stream:true}))
                 .pipe(
-                    gulpif(notifyConfig.useNotify,
-                        notify({
-                            onLast: true,
-                            sound: notifyConfig.sounds.onSuccess,
-                            title: notifyConfig.title,
-                            message: 'Less for sprites is ready. \n'+ notifyConfig.taskFinishedText +'<%= options.date %>',
-                            templateOptions: {
-                                date: modifyDate.getTimeOfModify()
-                            }
-                        })
-                    )
+                    notifier('Less for sprites is ready')
                 );
         });
 };
