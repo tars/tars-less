@@ -58,7 +58,7 @@ module.exports = function(buildOptions) {
         }
     );
 
-    return gulp.task('compile-css', function() {
+    return gulp.task('css:compile-css', function() {
         return gulp.src(lessFilesToConcatinate)
             .pipe(concat('main' + buildOptions.hash + '.css'))
             .pipe(replace({
