@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var less = require('gulp-less');
 var gutil = require('gulp-util');
+var gulpif = require('gulp-if');
 var autoprefixer = require('gulp-autoprefixer');
 var replace = require('gulp-replace-task');
 var notify = require('gulp-notify');
@@ -69,13 +70,14 @@ module.exports = function(buildOptions) {
                 return '\nAn error occurred while compiling css.\nLook in the console for details.\n' + error;
             }))
             .pipe(
-                (useAutoprefixer) ?
+                gulpif(useAutoprefixer,
                     autoprefixer(
                         {
                             browsers: tarsConfig.autoprefixerConfig,
                             cascade: true
                         }
                     )
+                )
             )
             .on('error', notify.onError(function (error) {
                 return '\nAn error occurred while autoprefixing css.\nLook in the console for details.\n' + error;
