@@ -20,6 +20,9 @@ var lessFilesToConcatinate = [
     ];
 
 var useAutoprefixer = false;
+var helperStream;
+var mainStream;
+var ie9Stream;
 
 if (tarsConfig.autoprefixerConfig) {
     useAutoprefixer = true;
@@ -39,8 +42,7 @@ lessFilesToConcatinate.push(
     './markup/' + tarsConfig.fs.staticFolderName + '/less/common.less',
     './markup/' + tarsConfig.fs.staticFolderName + '/less/plugins/**/*.less',
     './markup/' + tarsConfig.fs.staticFolderName + '/less/plugins/**/*.css',
-    './markup/modules/*/*.less',
-    './markup/' + tarsConfig.fs.staticFolderName + '/less/etc/**/*.less'
+    './markup/modules/*/*.less'
 );
 
 /**
@@ -59,7 +61,17 @@ module.exports = function(buildOptions) {
     );
 
     return gulp.task('css:compile-css', function() {
-        return gulp.src(lessFilesToConcatinate)
+
+        helperStream = gulp.src(scssFilesToConcatinate);
+        mainStream = helperStream.pipe(addsrc.append('./markup/' + tarsConfig.fs.staticFolderName + '/scss/etc/**/*.less'));
+        ie9Stream = helperStream.pipe(
+                                addsrc.append([
+                                        './markup/modules/*/ie/ie9.less',
+                                        './markup/' + tarsConfig.fs.staticFolderName + '/scss/etc/**/*.less'
+                                    ])
+                            );
+
+        mainStream
             .pipe(concat('main' + buildOptions.hash + '.css'))
             .pipe(replace({
                 patterns: patterns,
@@ -87,5 +99,26 @@ module.exports = function(buildOptions) {
             .pipe(
                 notifier('Less-files\'ve been compiled')
             );
-        });
+
+        return ie9Stream
+            .pipe(plumber())
+            .pipe(concat('main_ie9' + buildOptions.hash + '.css'))
+            .pipe(replace({
+                patterns: patterns,
+                usePrefix: false
+            }))
+            .pipe(less())
+            .on('error', notify.onError(function (error) {
+                return '\nAn error occurred while compiling css for ie9.\nLook in the console for details.\n' + error;
+            }))
+            .pipe(autoprefixer('ie 9', { cascade: true }))
+            .on('error', notify.onError(function (error) {
+                return '\nAn error occurred while autoprefixing css.\nLook in the console for details.\n' + error;
+            }))
+            .pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/css/'))
+            .pipe(browserSync.reload({stream:true}))
+            .pipe(
+                notifier('Less-files for ie9 have been compiled')
+            );
+    });
 };
