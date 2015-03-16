@@ -31,13 +31,16 @@
     background-position: @svg-sprite-offset-x  @svg-sprite-offset-y;
   }
 
-  .svg-image-name(@svg-sprite) {
-    @svg-sprite-name-url: ~`'../img/svg/' + "@{svg-sprite}".split(', ')[9].replace(']', '').replace(/\'/g, '') + '.svg'`;
-    background-image: url(@svg-sprite-name-url);
+  .svg-sprite-image(@svg-sprite) {
+    background-image: url(%=staticPrefixForCss=%rastered-svg-sprite/' + "@{sprite}".split(', ')[8].replace(']', '').replace(/\'/g, '')`;);
   }
 
-  .svg-fallback-sprite-image(@svg-sprite) {
-    @svg-sprite-image-url: ~`'../img/rasterSvgSprite/' + "@{svg-sprite}".split(', ')[8].replace(']', '').replace(/\'/g, '')`;
-    background-image: url(@svg-sprite-image-url);
+  .bg-svg(@svg-sprite, @repeat: no-repeat) {
+    .svg-sprite-image(@svg-sprite);
+    .svg-sprite-position(@svg-sprite);
+    .svg-sprite-width(@svg-sprite);
+    .svg-sprite-height(@svg-sprite);
+
+    background-repeat: @repeat;
   }
 {{/options.functions}}

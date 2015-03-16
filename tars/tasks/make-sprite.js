@@ -38,7 +38,7 @@ module.exports = function(buildOptions) {
                     spritesmith(
                         {
                             imgName: 'sprite.png',
-                            cssName: 'sprite' + dpi[i] + '.less',
+                            cssName: 'sprite_' + dpi[i] + '.less',
                             Algorithms: 'diagonal',
                             // padding: 4 * dpi[i],
                             engineOpts: {
@@ -49,7 +49,7 @@ module.exports = function(buildOptions) {
                                 dpi288: dpi288,
                                 dpi384: dpi384
                             },
-                            cssTemplate: './markup/' + tarsConfig.fs.staticFolderName + '/less/spriteGeneratorTemplates/less.sprite.mustache'
+                            cssTemplate: './markup/' + tarsConfig.fs.staticFolderName + '/less/sprite-generator-templates/less.sprite.mustache'
                         }
                     )
                 )
@@ -58,13 +58,13 @@ module.exports = function(buildOptions) {
                 }))
             );
 
-            spriteData[i].img.pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/pngSprite/' + dpi[i] + 'dpi/'))
+            spriteData[i].img.pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/png-sprite/' + dpi[i] + 'dpi/'))
                 .pipe(
                     notifier('Sprite img with dpi = ' + dpi[i] + ' is ready')
                 );
         }
 
-        return spriteData[0].css.pipe(gulp.dest('./markup/' + tarsConfig.fs.staticFolderName + '/less/spritesLess/'))
+        return spriteData[0].css.pipe(gulp.dest('./markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/'))
                 .pipe(browserSync.reload({stream:true}))
                 .pipe(
                     notifier('Less for sprites is ready')
