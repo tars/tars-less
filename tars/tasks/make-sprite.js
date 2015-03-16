@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var spritesmith = require('gulp.spritesmith');
 var notify = require('gulp-notify');
-var gutil = require('gulp-util');
 var tarsConfig = require('../../../tars-config');
 var notifier = require('../../helpers/notifier');
 var browserSync = require('browser-sync');
@@ -40,10 +39,6 @@ module.exports = function(buildOptions) {
                             imgName: 'sprite.png',
                             cssName: 'sprite_' + dpi[i] + '.less',
                             Algorithms: 'diagonal',
-                            // padding: 4 * dpi[i],
-                            engineOpts: {
-                                imagemagick: true
-                            },
                             cssOpts: {
                                 dpi192: dpi192,
                                 dpi288: dpi288,
