@@ -3,6 +3,8 @@ var concat = require('gulp-concat');
 var less = require('gulp-less');
 var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
+var plumber = require('gulp-plumber');
+var addsrc = require('gulp-add-src');
 var autoprefixer = require('gulp-autoprefixer');
 var replace = require('gulp-replace-task');
 var notify = require('gulp-notify');
@@ -16,6 +18,7 @@ var lessFilesToConcatinate = [
         './markup/' + tarsConfig.fs.staticFolderName + '/less/libraries/**/*.css',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/mixins.less',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/sprite_96.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/sprite-png.less',
     ];
 
 var useAutoprefixer = false;
@@ -53,19 +56,19 @@ module.exports = function(buildOptions) {
 
     patterns.push(
         {
-            match: '%=staticPrefix=%',
-            replacement: tarsConfig.staticPrefix
+            match: '%=staticPrefixForCss=%',
+            replacement: tarsConfig.staticPrefixForCss()
         }
     );
 
     return gulp.task('css:compile-css', function() {
 
-        helperStream = gulp.src(scssFilesToConcatinate);
-        mainStream = helperStream.pipe(addsrc.append('./markup/' + tarsConfig.fs.staticFolderName + '/scss/etc/**/*.less'));
+        helperStream = gulp.src(lessFilesToConcatinate);
+        mainStream = helperStream.pipe(addsrc.append('./markup/' + tarsConfig.fs.staticFolderName + '/less/etc/**/*.less'));
         ie9Stream = helperStream.pipe(
                                 addsrc.append([
                                         './markup/modules/*/ie/ie9.less',
-                                        './markup/' + tarsConfig.fs.staticFolderName + '/scss/etc/**/*.less'
+                                        './markup/' + tarsConfig.fs.staticFolderName + '/less/etc/**/*.less'
                                     ])
                             );
 

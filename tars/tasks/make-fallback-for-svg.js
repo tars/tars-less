@@ -36,7 +36,7 @@ module.exports = function(buildOptions) {
                     return '\nAn error occurred while making fallback for svg.\nLook in the console for details.\n' + error;
                 }));
 
-            spriteData.img.pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/rasterув-svg-sprite/'))
+            spriteData.img.pipe(gulp.dest('./dev/' + tarsConfig.fs.staticFolderName + '/' + tarsConfig.fs.imagesFolderName + '/rastered-svg-sprite/'))
                 .pipe(
                     notifier('Sprite img for svg is ready')
                 );

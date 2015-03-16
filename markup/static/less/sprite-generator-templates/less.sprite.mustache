@@ -44,13 +44,15 @@
     .sprite-height(@sprite);
   }
 
-  .bg(@sprite, @repeat: no-repeat) {
+  .bg-template(@sprite, @repeat: no-repeat) {
     .sprite-mixin-template(@sprite);
     @sprite-total-width: ~`"@{sprite}".split(', ')[6]`;
     @sprite-total-height: ~`"@{sprite}".split(', ')[7]`;
     background-size: @sprite-total-width, @sprite-total-height;
     background-repeat: @repeat;
+  }
 
+  .highDpi(@sprite) {
     {{#options.dpi192}}
       @media screen and (-webkit-min-device-pixel-ratio: 2), only screen and ( min-resolution: 192dpi), only screen and ( min-resolution: 2dppx) {
           @sprite-image: ~`'%=staticPrefixForCss=%png-sprite/192dpi/' + "@{sprite}".split(', ')[8].replace(']', '').replace(/\'/g, '')`;

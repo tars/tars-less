@@ -32,7 +32,8 @@
   }
 
   .svg-sprite-image(@svg-sprite) {
-    background-image: url(%=staticPrefixForCss=%rastered-svg-sprite/' + "@{sprite}".split(', ')[8].replace(']', '').replace(/\'/g, '')`;);
+    @svg-sprite-image-url: ~`'../img/rastered-svg-sprite/' + "@{svg-sprite}".split(', ')[8].replace(']', '').replace(/\'/g, '')`;
+    background-image: url(@svg-sprite-image-url);
   }
 
   .bg-svg(@svg-sprite, @repeat: no-repeat) {

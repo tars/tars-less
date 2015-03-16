@@ -15,17 +15,17 @@ var lessFilesToConcatinate = [
         './markup/' + tarsConfig.fs.staticFolderName + '/less/libraries/**/*.less',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/libraries/**/*.css',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/mixins.less',
-        './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/sprite_96.less'
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/sprite_96.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/sprite-png-ie.less',
     ];
 
     if (tarsConfig.useSVG) {
         lessFilesToConcatinate.push(
-            './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/svg-fallback-sprite.less',
+            './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/svg-fallback-sprite.less'
         );
     }
 
     lessFilesToConcatinate.push(
-        './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/sprite-ie.less',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/fonts.less',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/vars.less',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/GUI.less',
@@ -47,8 +47,8 @@ module.exports = function(buildOptions) {
 
     patterns.push(
         {
-            match: '%=staticPrefix=%',
-            replacement: tarsConfig.staticPrefix
+            match: '%=staticPrefixForCss=%',
+            replacement: tarsConfig.staticPrefixForCss()
         }
     );
 
