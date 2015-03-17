@@ -4,27 +4,10 @@
 }
 
 {{#items}}
-  @{{name}}-x: {{px.x}};
-  @{{name}}-y: {{px.y}};
-  @{{name}}-offset-x: {{px.offset_x}};
-  @{{name}}-offset-y: {{px.offset_y}};
-  @{{name}}-width: {{px.width}};
-  @{{name}}-height: {{px.height}};
-  @{{name}}-total-width: {{px.total_width}};
-  @{{name}}-total-height: {{px.total_height}};
-  @{{name}}-image: '{{{escaped_image}}}';
   @{{name}}: {{px.x}} {{px.y}} {{px.offset_x}} {{px.offset_y}} {{px.width}} {{px.height}} {{px.total_width}} {{px.total_height}} '{{{escaped_image}}}' '{{{name}}}';
 {{/items}}
 
 {{#options.functions}}
-  .svg-sprite-width(@svg-sprite) {
-    width: ~`"@{svg-sprite}".split(', ')[4]`;
-  }
-
-  .svg-sprite-height(@svg-sprite) {
-    height: ~`"@{svg-sprite}".split(', ')[5]`;
-  }
-
   .svg-sprite-position(@svg-sprite) {
     @svg-sprite-offset-x: ~`"@{svg-sprite}".split(', ')[2]`;
     @svg-sprite-offset-y: ~`"@{svg-sprite}".split(', ')[3]`;
@@ -39,8 +22,8 @@
   .bg-svg(@svg-sprite, @repeat: no-repeat) {
     .svg-sprite-image(@svg-sprite);
     .svg-sprite-position(@svg-sprite);
-    .svg-sprite-width(@svg-sprite);
-    .svg-sprite-height(@svg-sprite);
+    width: ~`"@{svg-sprite}".split(', ')[4]`;
+    height: ~`"@{svg-sprite}".split(', ')[5]`;
 
     background-repeat: @repeat;
   }
