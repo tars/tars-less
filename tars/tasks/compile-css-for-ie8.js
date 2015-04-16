@@ -16,7 +16,7 @@ var lessFilesToConcatinate = [
         './markup/' + tarsConfig.fs.staticFolderName + '/less/libraries/**/*.css',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/mixins.less',
         './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/sprite_96.less',
-        './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/sprite-png-ie.less',
+        './markup/' + tarsConfig.fs.staticFolderName + '/less/sprites-less/sprite-png-ie.less'
     ];
 
 if (tarsConfig.useSVG) {

@@ -63,5 +63,5 @@ module.exports = function (buildOptions) {
                 .pipe(
                     notifier('Less for sprites is ready')
                 );
-        });
+    });
 };
