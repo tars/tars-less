@@ -44,7 +44,8 @@ module.exports = function (buildOptions) {
                                 dpi288: dpi288,
                                 dpi384: dpi384
                             },
-                            cssTemplate: './markup/' + tarsConfig.fs.staticFolderName + '/less/sprite-generator-templates/less.sprite.mustache'
+                            cssTemplate: './markup/' + tarsConfig.fs.staticFolderName + '/less/sprite-generator-templates/less.sprite.mustache',
+                            engine: 'phantomjssmith'
                         }
                     )
                 )
