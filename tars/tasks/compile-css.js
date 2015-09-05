@@ -7,6 +7,8 @@ var gulpif = tars.packages.gulpif;
 var plumber = tars.packages.plumber;
 var addsrc = tars.packages.addsrc;
 var autoprefixer = tars.packages.autoprefixer;
+tars.packages.promisePolyfill.polyfill();
+var postcss = tars.packages.postcss;
 var replace = tars.packages.replace;
 var notify = tars.packages.notify;
 var notifier = tars.helpers.notifier;
@@ -21,11 +23,21 @@ var lessFilesToConcatinate = [
         lessFolderPath + '/sprites-less/sprite_96.less',
         lessFolderPath + '/sprites-less/sprite-png.less'
     ];
-var useAutoprefixer = false;
 var patterns = [];
+var processors = [];
+var processorsIE9 = [
+    autoprefixer({browsers: ['ie 9']})
+];
 
 if (tars.config.autoprefixerConfig) {
-    useAutoprefixer = true;
+    processors.push(
+        autoprefixer({browsers: tars.config.autoprefixerConfig})
+    );
+}
+
+if (tars.config.postprocessors && tars.config.postprocessors.length) {
+    processors.push(tars.config.postprocessors);
+    processorsIE9.push(tars.config.postprocessors);
 }
 
 if (tars.config.useSVG) {
@@ -77,18 +89,9 @@ module.exports = function () {
             .on('error', notify.onError(function (error) {
                 return '\nAn error occurred while compiling css.\nLook in the console for details.\n' + error;
             }))
-            .pipe(
-                gulpif(useAutoprefixer,
-                    autoprefixer(
-                        {
-                            browsers: tars.config.autoprefixerConfig,
-                            cascade: true
-                        }
-                    )
-                )
-            )
+            .pipe(postcss(processors))
             .on('error', notify.onError(function (error) {
-                return '\nAn error occurred while autoprefixing css.\nLook in the console for details.\n' + error;
+                return '\nAn error occurred while postprocessing css.\nLook in the console for details.\n' + error;
             }))
             .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
             .pipe(browserSync.reload({ stream: true }))
@@ -107,9 +110,9 @@ module.exports = function () {
             .on('error', notify.onError(function (error) {
                 return '\nAn error occurred while compiling css for ie9.\nLook in the console for details.\n' + error;
             }))
-            .pipe(autoprefixer('ie 9', { cascade: true }))
+            .pipe(postcss(processorsIE9))
             .on('error', notify.onError(function (error) {
-                return '\nAn error occurred while autoprefixing css.\nLook in the console for details.\n' + error;
+                return '\nAn error occurred while postprocessing css.\nLook in the console for details.\n' + error;
             }))
             .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
             .pipe(browserSync.reload({ stream: true }))
