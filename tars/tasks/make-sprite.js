@@ -46,6 +46,7 @@ module.exports = function () {
                                 dpi288: dpi288,
                                 dpi384: dpi384
                             },
+                            padding: (i + 1) * 4,
                             cssTemplate: './markup/' + staticFolderName + '/less/sprite-generator-templates/less.sprite.mustache'
                         }
                     )
