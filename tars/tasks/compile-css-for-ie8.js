@@ -5,7 +5,7 @@ var gutil = tars.packages.gutil;
 var concat = tars.packages.concat;
 var less = tars.packages.less;
 var plumber = tars.packages.plumber;
-var autoprefix = tars.packages.autoprefixer;
+var autoprefixer = tars.packages.autoprefixer;
 tars.packages.promisePolyfill.polyfill();
 var postcss = tars.packages.postcss;
 var replace = tars.packages.replace;
