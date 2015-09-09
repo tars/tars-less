@@ -14,6 +14,7 @@ var notify = tars.packages.notify;
 var notifier = tars.helpers.notifier;
 var browserSync = tars.packages.browserSync;
 
+var postcssProcessors = tars.config.postcss;
 var lessFolderPath = './markup/' + tars.config.fs.staticFolderName + '/less';
 var lessFilesToConcatinate = [
         lessFolderPath + '/normalize.less',
@@ -35,9 +36,11 @@ if (tars.config.autoprefixerConfig) {
     );
 }
 
-if (tars.config.postprocessors && tars.config.postprocessors.length) {
-    processors.push(tars.config.postprocessors);
-    processorsIE9.push(tars.config.postprocessors);
+if (postcssProcessors && postcssProcessors.length) {
+    postcssProcessors.forEach(function (processor) {
+        processors.push(require(processor.name)(processor.options));
+        processorsIE9.push(require(processor.name)(processor.options));
+    });
 }
 
 if (tars.config.useSVG) {
