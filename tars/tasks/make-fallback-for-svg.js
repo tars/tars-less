@@ -18,7 +18,7 @@ module.exports = function () {
 
         var spriteData = '';
 
-        if (tars.config.useSVG && tars.flags.ie8) {
+        if (tars.config.useSVG && (tars.flags.ie8 || tars.flags.ie)) {
 
             spriteData = gulp.src('./dev/' + staticFolderName + '/' + imagesFolderName + '/rastered-svg-images/*.png')
                 .pipe(

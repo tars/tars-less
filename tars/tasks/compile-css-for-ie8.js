@@ -2,6 +2,7 @@
 
 var gulp = tars.packages.gulp;
 var gutil = tars.packages.gutil;
+var gulpif = tars.packages.gulpif;
 var concat = tars.packages.concat;
 var less = tars.packages.less;
 var plumber = tars.packages.plumber;
@@ -9,6 +10,7 @@ var autoprefixer = tars.packages.autoprefixer;
 tars.packages.promisePolyfill.polyfill();
 var postcss = tars.packages.postcss;
 var replace = tars.packages.replace;
+var sourcemaps = tars.packages.sourcemaps;
 var notify = tars.packages.notify;
 var notifier = tars.helpers.notifier;
 var browserSync = tars.packages.browserSync;
@@ -24,15 +26,16 @@ var lessFilesToConcatinate = [
         lessFolderPath + '/sprites-less/sprite-png-ie.less'
     ];
 var patterns = [];
-var processors = [
-    autoprefixer({browsers: ['ie 8']})
-];
+var processors = [];
+var generateSourceMaps = tars.config.sourcemaps.css && !tars.flags.release && !tars.flags.min;
 
 if (postcssProcessors && postcssProcessors.length) {
     postcssProcessors.forEach(function (processor) {
         processors.push(require(processor.name)(processor.options));
     });
 }
+
+processors.push(autoprefixer({browsers: ['ie 8']}));
 
 if (tars.config.useSVG) {
     lessFilesToConcatinate.push(
@@ -49,7 +52,9 @@ lessFilesToConcatinate.push(
     lessFolderPath + '/plugins/**/*.css',
     './markup/modules/*/*.less',
     './markup/modules/*/ie/ie8.less',
-    lessFolderPath + '/etc/**/*.less'
+    lessFolderPath + '/etc/**/*.less',
+    '!./**/_*.less',
+    '!./**/_*.css'
 );
 
 patterns.push(
