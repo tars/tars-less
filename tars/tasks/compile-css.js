@@ -29,7 +29,8 @@ var lessFilesToConcatinate = [
 var patterns = [];
 var processors = [];
 var processorsIE9 = [];
-var generateSourceMaps = tars.config.sourcemaps.css && !tars.flags.release && !tars.flags.min;
+var generateSourceMaps = tars.config.sourcemaps.css.active && !tars.flags.release && !tars.flags.min;
+var sourceMapsDest = tars.config.sourcemaps.css.inline ? '' : '.';
 
 if (postcssProcessors && postcssProcessors.length) {
     postcssProcessors.forEach(function (processor) {
@@ -91,7 +92,6 @@ module.exports = function () {
             ie9Stream
                 .pipe(plumber())
                 .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
-                .pipe(concat({cwd: process.cwd(), path: 'main_ie9' + tars.options.build.hash + '.css'}))
                 .pipe(replace({
                     patterns: patterns,
                     usePrefix: false
@@ -104,7 +104,8 @@ module.exports = function () {
                 .on('error', notify.onError(function (error) {
                     return '\nAn error occurred while postprocessing css.\nLook in the console for details.\n' + error;
                 }))
-                .pipe(gulpif(generateSourceMaps, sourcemaps.write()))
+                .pipe(concat({cwd: process.cwd(), path: 'main_ie9' + tars.options.build.hash + '.css'}))
+                .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
@@ -114,7 +115,6 @@ module.exports = function () {
 
         return mainStream
             .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
-            .pipe(concat({cwd: process.cwd(), path: 'main' + tars.options.build.hash + '.css'}))
             .pipe(replace({
                 patterns: patterns,
                 usePrefix: false
@@ -127,7 +127,8 @@ module.exports = function () {
             .on('error', notify.onError(function (error) {
                 return '\nAn error occurred while postprocessing css.\nLook in the console for details.\n' + error;
             }))
-            .pipe(gulpif(generateSourceMaps, sourcemaps.write()))
+            .pipe(concat({cwd: process.cwd(), path: 'main' + tars.options.build.hash + '.css'}))
+            .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
             .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
             .pipe(browserSync.reload({ stream: true }))
             .pipe(

@@ -27,7 +27,8 @@ var lessFilesToConcatinate = [
     ];
 var patterns = [];
 var processors = [];
-var generateSourceMaps = tars.config.sourcemaps.css && !tars.flags.release && !tars.flags.min;
+var generateSourceMaps = tars.config.sourcemaps.css.active && !tars.flags.release && !tars.flags.min;
+var sourceMapsDest = tars.config.sourcemaps.css.inline ? '' : '.';
 
 if (postcssProcessors && postcssProcessors.length) {
     postcssProcessors.forEach(function (processor) {
@@ -70,10 +71,10 @@ patterns.push(
 module.exports = function () {
 
     return gulp.task('css:compile-css-for-ie8', function (cb) {
-        if (tars.flags.ie8) {
-            return gulp.src(lessFilesToConcatinate)
+        if (tars.flags.ie8 || tars.flags.ie) {
+            return gulp.src(lessFilesToConcatinate, { base: process.cwd() })
                 .pipe(plumber())
-                .pipe(concat('main_ie8' + tars.options.build.hash + '.css'))
+                .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
                 .pipe(replace({
                     patterns: patterns,
                     usePrefix: false
@@ -86,6 +87,8 @@ module.exports = function () {
                 .on('error', notify.onError(function (error) {
                     return '\nAn error occurred while postprocessing css.\nLook in the console for details.\n' + error;
                 }))
+                .pipe(concat({cwd: process.cwd(), path: 'main_ie8' + tars.options.build.hash + '.css'}))
+                .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
