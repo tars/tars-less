@@ -91,7 +91,6 @@ module.exports = function () {
         if (tars.flags.ie9 || tars.flags.ie) {
             ie9Stream
                 .pipe(plumber())
-                .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
                 .pipe(replace({
                     patterns: patterns,
                     usePrefix: false
@@ -105,7 +104,6 @@ module.exports = function () {
                     return '\nAn error occurred while postprocessing css.\nLook in the console for details.\n' + error;
                 }))
                 .pipe(concat({cwd: process.cwd(), path: 'main_ie9' + tars.options.build.hash + '.css'}))
-                .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
