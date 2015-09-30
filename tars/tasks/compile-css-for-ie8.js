@@ -69,27 +69,25 @@ module.exports = function () {
     return gulp.task('css:compile-css-for-ie8', function (cb) {
         if (tars.flags.ie8 || tars.flags.ie) {
             return gulp.src(lessFilesToConcatinate, { base: process.cwd() })
-                .pipe(plumber())
+                .pipe(plumber({
+                    errorHandler: notify.onError(function (error) {
+                        return '\nAn error occurred while compiling css for IE8.\nLook in the console for details.\n' + error;
+                    })
+                }))
                 .pipe(replace({
                     patterns: patterns,
                     usePrefix: false
                 }))
                 .pipe(less())
-                .on('error', notify.onError(function (error) {
-                    return '\nAn error occurred while compiling css for ie8.\nLook in the console for details.\n' + error;
-                }))
                 .pipe(postcss(processors))
-                .on('error', notify.onError(function (error) {
-                    return '\nAn error occurred while postprocessing css.\nLook in the console for details.\n' + error;
-                }))
                 .pipe(concat({cwd: process.cwd(), path: 'main_ie8' + tars.options.build.hash + '.css'}))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
-                    notifier('Less-files for ie8 have been compiled.')
+                    notifier('Less-files for IE8 have been compiled.')
                 );
         } else {
-            gutil.log('!Stylies for ie8 are not used!');
+            gutil.log('!Stylies for IE8 are not used!');
             cb(null);
         }
     });

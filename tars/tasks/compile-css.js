@@ -90,41 +90,38 @@ module.exports = function () {
 
         if (tars.flags.ie9 || tars.flags.ie) {
             ie9Stream
-                .pipe(plumber())
+                .pipe(plumber({
+                    errorHandler: notify.onError(function (error) {
+                        return '\nAn error occurred while compiling css for IE9.\nLook in the console for details.\n' + error;
+                    })
+                }))
                 .pipe(replace({
                     patterns: patterns,
                     usePrefix: false
                 }))
                 .pipe(less())
-                .on('error', notify.onError(function (error) {
-                    return '\nAn error occurred while compiling css for ie9.\nLook in the console for details.\n' + error;
-                }))
                 .pipe(postcss(processorsIE9))
-                .on('error', notify.onError(function (error) {
-                    return '\nAn error occurred while postprocessing css.\nLook in the console for details.\n' + error;
-                }))
                 .pipe(concat({cwd: process.cwd(), path: 'main_ie9' + tars.options.build.hash + '.css'}))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
-                    notifier('Less-files for ie9 have been compiled')
+                    notifier('Less-files for IE9 have been compiled')
                 );
         }
 
         return mainStream
+            .pipe(plumber({
+                errorHandler: notify.onError(function (error) {
+                    return '\nAn error occurred while compiling css.\nLook in the console for details.\n' + error;
+                })
+            }))
             .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
             .pipe(replace({
                 patterns: patterns,
                 usePrefix: false
             }))
             .pipe(less())
-            .on('error', notify.onError(function (error) {
-                return '\nAn error occurred while compiling css.\nLook in the console for details.\n' + error;
-            }))
             .pipe(postcss(processors))
-            .on('error', notify.onError(function (error) {
-                return '\nAn error occurred while postprocessing css.\nLook in the console for details.\n' + error;
-            }))
             .pipe(concat({cwd: process.cwd(), path: 'main' + tars.options.build.hash + '.css'}))
             .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
             .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
