@@ -77,7 +77,9 @@ module.exports = function () {
                     patterns: patterns,
                     usePrefix: false
                 }))
-                .pipe(less())
+                .pipe(less({
+                    path: [process.cwd()]
+                }))
                 .pipe(postcss(processors))
                 .pipe(concat('main_ie8' + tars.options.build.hash + '.css'))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
