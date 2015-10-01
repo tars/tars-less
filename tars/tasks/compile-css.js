@@ -102,7 +102,7 @@ module.exports = function () {
                 }))
                 .pipe(less())
                 .pipe(postcss(processorsIE9))
-                .pipe(concat({cwd: process.cwd(), path: 'main_ie9' + tars.options.build.hash + '.css'}))
+                .pipe(concat('main_ie9' + tars.options.build.hash + '.css'))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
@@ -123,7 +123,7 @@ module.exports = function () {
             }))
             .pipe(less())
             .pipe(postcss(processors))
-            .pipe(concat({cwd: process.cwd(), path: 'main' + tars.options.build.hash + '.css'}))
+            .pipe(concat('main' + tars.options.build.hash + '.css'))
             .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
             .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
             .pipe(browserSync.reload({ stream: true }))
