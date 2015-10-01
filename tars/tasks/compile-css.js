@@ -12,9 +12,10 @@ tars.packages.promisePolyfill.polyfill();
 var postcss = tars.packages.postcss;
 var replace = tars.packages.replace;
 var sourcemaps = tars.packages.sourcemaps;
-var notify = tars.packages.notify;
 var notifier = tars.helpers.notifier;
 var browserSync = tars.packages.browserSync;
+
+var through2 = tars.packages.through2;
 
 var postcssProcessors = tars.config.postcss;
 var lessFolderPath = './markup/' + tars.config.fs.staticFolderName + '/less';
@@ -91,9 +92,9 @@ module.exports = function () {
         if (tars.flags.ie9 || tars.flags.ie) {
             ie9Stream
                 .pipe(plumber({
-                    errorHandler: notify.onError(function (error) {
-                        return '\nAn error occurred while compiling css for IE9.\nLook in the console for details.\n' + error;
-                    })
+                    errorHandler: function (error) {
+                        notifier.error('An error occurred while compiling css for IE9.', error);
+                    }
                 }))
                 .pipe(replace({
                     patterns: patterns,
@@ -105,15 +106,15 @@ module.exports = function () {
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
-                    notifier('Less-files for IE9 have been compiled')
+                    notifier.success('Less-files for IE9 have been compiled')
                 );
         }
 
         return mainStream
             .pipe(plumber({
-                errorHandler: notify.onError(function (error) {
-                    return '\nAn error occurred while compiling css.\nLook in the console for details.\n' + error;
-                })
+                errorHandler: function (error) {
+                    notifier.error('An error occurred while compiling css.', error);
+                }
             }))
             .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
             .pipe(replace({
@@ -127,7 +128,7 @@ module.exports = function () {
             .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
             .pipe(browserSync.reload({ stream: true }))
             .pipe(
-                notifier('Less-files\'ve been compiled')
+                notifier.success('Less-files\'ve been compiled')
             );
     });
 };

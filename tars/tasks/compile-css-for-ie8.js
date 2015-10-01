@@ -9,7 +9,6 @@ var autoprefixer = tars.packages.autoprefixer;
 tars.packages.promisePolyfill.polyfill();
 var postcss = tars.packages.postcss;
 var replace = tars.packages.replace;
-var notify = tars.packages.notify;
 var notifier = tars.helpers.notifier;
 var browserSync = tars.packages.browserSync;
 
@@ -70,9 +69,9 @@ module.exports = function () {
         if (tars.flags.ie8 || tars.flags.ie) {
             return gulp.src(lessFilesToConcatinate, { base: process.cwd() })
                 .pipe(plumber({
-                    errorHandler: notify.onError(function (error) {
-                        return '\nAn error occurred while compiling css for IE8.\nLook in the console for details.\n' + error;
-                    })
+                    errorHandler: function (error) {
+                        notifier.error('An error occurred while compiling css for IE8.', error);
+                    }
                 }))
                 .pipe(replace({
                     patterns: patterns,
@@ -84,7 +83,7 @@ module.exports = function () {
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
-                    notifier('Less-files for IE8 have been compiled.')
+                    notifier.success('Less-files for IE8 have been compiled.')
                 );
         } else {
             gutil.log('!Stylies for IE8 are not used!');
