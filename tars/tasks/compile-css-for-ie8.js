@@ -73,6 +73,7 @@ module.exports = function () {
                         notifier.error('An error occurred while compiling css for IE8.', error);
                     }
                 }))
+                .pipe(concat('main_ie8' + tars.options.build.hash + '.css'))
                 .pipe(replace({
                     patterns: patterns,
                     usePrefix: false
@@ -81,7 +82,6 @@ module.exports = function () {
                     path: [process.cwd()]
                 }))
                 .pipe(postcss(processors))
-                .pipe(concat('main_ie8' + tars.options.build.hash + '.css'))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(

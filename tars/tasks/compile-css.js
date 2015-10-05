@@ -96,6 +96,7 @@ module.exports = function () {
                         notifier.error('An error occurred while compiling css for IE9.', error);
                     }
                 }))
+                .pipe(concat('main_ie9' + tars.options.build.hash + '.css'))
                 .pipe(replace({
                     patterns: patterns,
                     usePrefix: false
@@ -104,7 +105,6 @@ module.exports = function () {
                     path: [process.cwd()]
                 }))
                 .pipe(postcss(processorsIE9))
-                .pipe(concat('main_ie9' + tars.options.build.hash + '.css'))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
@@ -118,7 +118,8 @@ module.exports = function () {
                     notifier.error('An error occurred while compiling css.', error);
                 }
             }))
-            .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
+            // .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
+            .pipe(concat('main' + tars.options.build.hash + '.css'))
             .pipe(replace({
                 patterns: patterns,
                 usePrefix: false
@@ -127,8 +128,7 @@ module.exports = function () {
                 path: [process.cwd()]
             }))
             .pipe(postcss(processors))
-            .pipe(concat('main' + tars.options.build.hash + '.css'))
-            .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
+            // .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
             .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
             .pipe(browserSync.reload({ stream: true }))
             .pipe(
