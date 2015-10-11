@@ -6,12 +6,12 @@ var concat = tars.packages.concat;
 var less = tars.packages.less;;
 var gulpif = tars.packages.gulpif;
 var plumber = tars.packages.plumber;
-var addsrc = tars.packages.addsrc;
 var autoprefixer = tars.packages.autoprefixer;
 tars.packages.promisePolyfill.polyfill();
 var postcss = tars.packages.postcss;
 var replace = tars.packages.replace;
 var sourcemaps = tars.packages.sourcemaps;
+var importify = tars.packages.importify;
 var notifier = tars.helpers.notifier;
 var browserSync = tars.packages.browserSync;
 
@@ -27,6 +27,7 @@ var lessFilesToConcatinate = [
         lessFolderPath + '/sprites-less/sprite_96.less',
         lessFolderPath + '/sprites-less/sprite-png.less'
     ];
+var lessFilesToConcatinateForIe9;
 var patterns = [];
 var processors = [];
 var processorsIE9 = [];
@@ -66,6 +67,13 @@ lessFilesToConcatinate.push(
     '!./**/_*.css'
 );
 
+lessFilesToConcatinateForIe9 = lessFilesToConcatinate.slice();
+lessFilesToConcatinate.push(lessFolderPath + '/etc/**/*.less');
+lessFilesToConcatinateForIe9.push(
+    './markup/modules/*/ie/ie9.less',
+    lessFolderPath + '/etc/**/*.less'
+);
+
 patterns.push(
     {
         match: '%=staticPrefixForCss=%',
@@ -80,14 +88,8 @@ module.exports = function () {
 
     return gulp.task('css:compile-css', function () {
 
-        var helperStream = gulp.src(lessFilesToConcatinate, { base: process.cwd() });
-        var mainStream = helperStream.pipe(addsrc.append(lessFolderPath + '/etc/**/*.less'));
-        var ie9Stream = helperStream.pipe(
-                                addsrc.append([
-                                        './markup/modules/*/ie/ie9.less',
-                                        lessFolderPath + '/etc/**/*.less'
-                                    ])
-                            );
+        var mainStream = gulp.src(lessFilesToConcatinate, { base: process.cwd() });
+        var ie9Stream = gulp.src(lessFilesToConcatinateForIe9, { base: process.cwd() });
 
         if (tars.flags.ie9 || tars.flags.ie) {
             ie9Stream
@@ -96,15 +98,18 @@ module.exports = function () {
                         notifier.error('An error occurred while compiling css for IE9.', error);
                     }
                 }))
-                .pipe(concat('main_ie9' + tars.options.build.hash + '.css'))
-                .pipe(replace({
-                    patterns: patterns,
-                    usePrefix: false
+                .pipe(importify('main_ie9.less', {
+                    cssPreproc: 'less'
                 }))
                 .pipe(less({
                     path: [process.cwd()]
                 }))
+                .pipe(replace({
+                    patterns: patterns,
+                    usePrefix: false
+                }))
                 .pipe(postcss(processorsIE9))
+                .pipe(concat('main_ie9' + tars.options.build.hash + '.css'))
                 .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
                 .pipe(browserSync.reload({ stream: true }))
                 .pipe(
@@ -118,17 +123,21 @@ module.exports = function () {
                     notifier.error('An error occurred while compiling css.', error);
                 }
             }))
-            // .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
-            .pipe(concat('main' + tars.options.build.hash + '.css'))
+            .pipe(gulpif(generateSourceMaps, sourcemaps.init()))
+            .pipe(importify('main.less', {
+                cssPreproc: 'less'
+            }))
+            .pipe(gulp.dest('./dev/temp/'))
+            .pipe(less({
+                path: [process.cwd()]
+            }))
             .pipe(replace({
                 patterns: patterns,
                 usePrefix: false
             }))
-            .pipe(less({
-                path: [process.cwd()]
-            }))
             .pipe(postcss(processors))
-            // .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
+            .pipe(concat('main' + tars.options.build.hash + '.css'))
+            .pipe(gulpif(generateSourceMaps, sourcemaps.write(sourceMapsDest)))
             .pipe(gulp.dest('./dev/' + tars.config.fs.staticFolderName + '/css/'))
             .pipe(browserSync.reload({ stream: true }))
             .pipe(
