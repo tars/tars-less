@@ -21,8 +21,7 @@ var postcssProcessors = tars.config.postcss;
 var lessFolderPath = './markup/' + tars.config.fs.staticFolderName + '/less';
 var lessFilesToConcatinate = [
         lessFolderPath + '/normalize.less',
-        lessFolderPath + '/libraries/**/*.less',
-        lessFolderPath + '/libraries/**/*.css',
+        lessFolderPath + '/libraries/**/*.{less,css}',
         lessFolderPath + '/mixins.less',
         lessFolderPath + '/sprites-less/sprite_96.less',
         lessFolderPath + '/sprites-less/sprite-png.less'
@@ -59,19 +58,17 @@ lessFilesToConcatinate.push(
     lessFolderPath + '/fonts.less',
     lessFolderPath + '/vars.less',
     lessFolderPath + '/GUI.less',
-    lessFolderPath + '/common.less',
-    lessFolderPath + '/plugins/**/*.less',
-    lessFolderPath + '/plugins/**/*.css',
+    lessFolderPath + '/common.{less,css}',
+    lessFolderPath + '/plugins/**/*.{less,css}',
     './markup/modules/*/*.less',
-    '!./**/_*.less',
-    '!./**/_*.css'
+    '!./**/_*.{less,css}',
 );
 
 lessFilesToConcatinateForIe9 = lessFilesToConcatinate.slice();
-lessFilesToConcatinate.push(lessFolderPath + '/etc/**/*.less');
+lessFilesToConcatinate.push(lessFolderPath + '/etc/**/*.{less,css}');
 lessFilesToConcatinateForIe9.push(
     './markup/modules/*/ie/ie9.less',
-    lessFolderPath + '/etc/**/*.less'
+    lessFolderPath + '/etc/**/*.{less,css}'
 );
 
 patterns.push(
