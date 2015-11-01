@@ -114,7 +114,7 @@ module.exports = function () {
                 );
         }
 
-        return mainStream
+        mainStream
             .pipe(plumber({
                 errorHandler: function (error) {
                     notifier.error('An error occurred while compiling css.', error);
@@ -140,5 +140,7 @@ module.exports = function () {
             .pipe(
                 notifier.success('Less-files\'ve been compiled')
             );
+
+        return mainStream;
     });
 };
