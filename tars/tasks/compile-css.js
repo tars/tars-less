@@ -61,7 +61,7 @@ lessFilesToConcatinate.push(
     lessFolderPath + '/common.{less,css}',
     lessFolderPath + '/plugins/**/*.{less,css}',
     './markup/modules/*/*.less',
-    '!./**/_*.{less,css}',
+    '!./**/_*.{less,css}'
 );
 
 lessFilesToConcatinateForIe9 = lessFilesToConcatinate.slice();
